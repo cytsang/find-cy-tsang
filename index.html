@@ -77,7 +77,7 @@
 </head>
 <body>
 
-    <h1>Find CY Tsang 尋曾夠抵 👀 </h1>
+    <h1>Find CY Tsang \n尋曾夠抵 👀 </h1>
 
     <!-- Live Status Area -->
     <div class="status-box">
@@ -98,7 +98,7 @@
             <div class="ticket-number" id="displayTicket">--</div>
             <div class="ticket-time" id="displayTime">--</div>
             <div class="screenshot-caption">
-                📸 Screen Capture to record your ticket, especially if you have not entered the email. 📸
+                📸 Screen capture this to record your ticket, especially when you have not entered the email in the last step. 📸
             </div>
             <button class="close-btn" onclick="closeModal()">Close</button>
         </div>
@@ -137,7 +137,7 @@
             }
 
             // 2. Ask for Email (Optional)
-            let email = prompt("[[[ Optional ]]] \nEnter email to receive your ticket and a reminder when called (Leave blank to skip):");
+            let email = prompt("[[[ Optional ]]] \nEnter email to receive your ticket and a reminder when called. Sometimes you have to check the junk mailbox. (Leave it blank to skip):");
             if (email === null) email = ""; 
 
             // 3. Send data to your Google Sheet "Brain"
