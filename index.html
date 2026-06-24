@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find CY Tsang</title>
+    <style>
+        /* This section styles the look and feel */
+        body {
+            background-color: #f7d0e2; /* Your requested background color */
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+        h1 { color: #333; margin-bottom: 30px; font-size: 32px; }
+        
+        /* The Category Buttons */
+        .btn {
+            display: block;
+            width: 90%;
+            max-width: 350px;
+            margin: 15px auto;
+            padding: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            background-color: #ffffff;
+            border: 2px solid #333;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn:active { transform: scale(0.98); } /* Small click effect */
+
+        /* Live Status Area */
+        .status-box {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 0 auto 30px auto;
+            width: 90%;
+            max-width: 350px;
+        }
+
+        /* The Pop-up Ticket Background */
+        #ticketModal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: #edf5c9; /* Your requested pop-up color */
+            width: 85%;
+            max-width: 350px;
+            margin: 40% auto; /* Centers it on mobile */
+            padding: 30px 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        /* Inside the Ticket */
+        .ticket-number { font-size: 70px; font-weight: bold; margin: 10px 0; color: #222; }
+        .ticket-time { font-size: 14px; color: #555; margin-bottom: 25px; }
+        .screenshot-caption { 
+            font-size: 16px; 
+            font-weight: bold; 
+            color: #d32f2f; 
+            background: #fff; 
+            padding: 15px; 
+            border-radius: 8px; 
+            border: 2px dashed #d32f2f;
+        }
+        .close-btn { margin-top: 25px; padding: 10px 30px; font-size: 16px; font-weight:bold; cursor: pointer; border-radius: 8px;}
+    </style>
+</head>
+<body>
+
+    <h1>Find CY Tsang</h1>
+
+    <!-- Live Status Area -->
+    <div class="status-box">
+        <h3>Live Status</h3>
+        <p><i>(Currently Called Numbers will appear here)</i></p>
+    </div>
+
+    <!-- Category Buttons -->
+    <button class="btn" onclick="requestTicket('A')">A. Academic</button>
+    <button class="btn" onclick="requestTicket('B')">B. Technology</button>
+    <button class="btn" onclick="requestTicket('C')">C. Personal</button>
+    <button class="btn" onclick="requestTicket('D')">D. Others</button>
+
+    <!-- The Pop-up Ticket window (Hidden until triggered) -->
+    <div id="ticketModal">
+        <div class="modal-content">
+            <h2>Your Ticket</h2>
+            <div class="ticket-number" id="displayTicket">--</div>
+            <div class="ticket-time" id="displayTime">--</div>
+            <div class="screenshot-caption">
+                📸 PLEASE SCREEN CAPTURE THIS SCREEN TO RECORD YOUR NUMBER 📸
+            </div>
+            <button class="close-btn" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // --- STEP 4 MISSION: PASTE YOUR URL HERE ---
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw0XFHEjP9vkyYvkWKYi87ydxxiO2_Oj0HCbta5719PwzG7OAe4YeAazoZgkNHgvv0/exec";
+
+// Auto-fetch Live Status every 5 seconds
+    function fetchLiveStatus() {
+        fetch(WEB_APP_URL)
+        .then(response => response.json())
+        .then(data => {
+            let statusHtml = `
+                
+                  A: ${data.A}   |   B: ${data.B} 
+                  C: ${data.C}   |   D: ${data.D}
+                
+            `;
+            document.querySelector('.status-box p').innerHTML = statusHtml;
+        })
+        .catch(error => console.log("Waiting for status update..."));
+    }
+    
+    // Run it immediately, then set the timer
+    fetchLiveStatus();
+    setInterval(fetchLiveStatus, 5000);
+
+        function requestTicket(category) {
+            // 1. Ask for Name
+            let name = prompt("Please enter your name:");
+            if (!name || name.trim() === "") {
+                alert("Name is required to get a ticket.");
+                return;
+            }
+
+            // 2. Ask for Email (Optional)
+            let email = prompt("Optional: Enter email to receive your ticket and a reminder when called (Leave blank to skip):");
+            if (email === null) email = ""; 
+
+            // 3. Send data to your Google Sheet "Brain"
+            alert("Getting your ticket... Please wait a few seconds.");
+
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                body: JSON.stringify({ category: category, name: name, email: email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.status === "success") {
+                    // 4. Update the Pop-up with the new ticket info
+                    document.getElementById("displayTicket").innerText = data.ticketId;
+                    document.getElementById("displayTime").innerText = "Issued: " + data.timestamp + " (HKT)";
+                    // 5. Show the Pop-up
+                    document.getElementById("ticketModal").style.display = "block";
+                }
+            })
+            .catch(error => {
+                alert("Error getting ticket. Check if you pasted the Web App URL correctly.");
+            });
+        }
+
+        function closeModal() {
+            document.getElementById("ticketModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>
