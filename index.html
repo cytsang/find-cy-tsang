@@ -114,11 +114,11 @@
         .then(response => response.json())
         .then(data => {
             let statusHtml = `
-                
-                  A: ${data.A}   |   B: ${data.B} 
-                  C: ${data.C}   |   D: ${data.D}
-                
-            `;
+                    <h3 style="margin: 5px 0; line-height: 1.6; color: #333;">
+                      A: ${data.A} &nbsp;&nbsp;|&nbsp;&nbsp; B: ${data.B} <br>
+                      C: ${data.C} &nbsp;&nbsp;|&nbsp;&nbsp; D: ${data.D}
+                    </h3>
+                `;
             document.querySelector('.status-box p').innerHTML = statusHtml;
         })
         .catch(error => console.log("Waiting for status update..."));
