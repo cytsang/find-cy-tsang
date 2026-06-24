@@ -137,11 +137,11 @@
             }
 
             // 2. Ask for Email (Optional)
-            let email = prompt("Optional: Enter email to receive your ticket and a reminder when called (Leave blank to skip):");
+            let email = prompt("[[[Optiona]]] Enter email to receive your ticket and a reminder when called (Leave blank to skip):");
             if (email === null) email = ""; 
 
             // 3. Send data to your Google Sheet "Brain"
-            alert("Getting your ticket... Please wait a few seconds.");
+            alert("Getting your ticket... [Close this box to CONFIRM]");
 
             fetch(WEB_APP_URL, {
                 method: "POST",
